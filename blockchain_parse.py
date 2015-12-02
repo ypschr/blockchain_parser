@@ -9,9 +9,9 @@ except:
     print ("I am unable to connect to the database")
 
 def writetoblock(id, height, timestamp):
-	cur = conn.cursor()
-	cur.execute("INSERT INTO block (id,height,timestamp) VALUES (%s,%s,%s)", (id, height, timestamp))
-	conn.commit()
+    cur = conn.cursor()
+    cur.execute("INSERT INTO block (id,height,timestamp) VALUES (%s,%s,%s)", (id, height, timestamp))
+    conn.commit()
 def writetotransaction(id, block_id, locktime, size, type, fee, transaction_size):
         cur = conn.cursor()
         cur.execute("INSERT INTO transaction (id, block_id, locktime, size, type, fee, transaction_size) VALUES (%s,%s,%s,%s,%s,%s,%s)", (id, block_id, locktime, size, type, fee, transaction_size))
@@ -25,9 +25,9 @@ def writetooutput(transaction_id, unspent, type, value, number, type_meta):
         cur.execute("INSERT INTO output (transaction_id, unspent, type, value, number, type_meta) VALUES (%s,%s,%s,%s,%s,%s,%s)", (transaction_id, unspent, type, value, number, type_meta))
         conn.commit()
 def writetop2sh(input_id, type, full_script):
-	cur = conn.cursor()        
-	cur.execute("INSERT INTO p2sh (input_id, type, full_script) VALUES (%s,%s,%s)", (input_id, type, full_script))
-	conn.commit()
+    cur = conn.cursor()        
+    cur.execute("INSERT INTO p2sh (input_id, type, full_script) VALUES (%s,%s,%s)", (input_id, type, full_script))
+    conn.commit()
 def writetooutput_script(output_id, type, full_script):
         cur = conn.cursor()        
         cur.execute("INSERT INTO output_script (output_id, type, full_script) VALUES (%s,%s,%s)", (output_id, type, full_script))
@@ -42,17 +42,38 @@ print(blockchain.get_main_chain())
 #print(type(orderedblockchain))
 #print(orderedblockchain[0])
 #get relevant data from relevant blocks and save to db
-def writeblockinfo(block):	
-	height = block.height
-	id = block.raw_hex
-	header = block.header()
-	timestamp = currentheader.timestamp
-	#writetoblock(id, currentheight, currenttimestamp)
-		
-print(test)
+def saveblockinfo(block):   
+    height = block.height
+    id = block.hash()
+    header = block.header()
+    timestamp = header.timestamp()
+    #writetoblock(id, height, timestamp)
+    print (id, height, timestamp)
+
+#gets all transactions in block, the relevant data
+#tries to write it to database
+def gettransactiontype(transaction):
+    print('testgettrans')
+def savetransactions(block):
+    for trans in block.transactions()
+        transid = trans.hash()
+        block_id = block.hash()
+        locktime =  trans.locktime()
+        value = 0
+        for output in trans.outputs:
+            try:
+                value += output.value()
+        size = trans.size
+        inputvalue = 0
+        for input in trans.inputs:
+            hash = input.transaction_hash()
+            index = input.transaction_index()
 
 
-#cur.close()
-conn.close()
 
+
+try:
+    cur.close()
+try:
+    conn.close()
 
